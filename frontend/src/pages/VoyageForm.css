@@ -1,0 +1,118 @@
+.voyage-form-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--bg-beige);
+  padding: 40px 20px;
+}
+
+.voyage-form-card {
+  background: var(--white);
+  border-radius: 16px;
+  box-shadow: var(--shadow-md);
+  padding: 40px;
+  width: 100%;
+  max-width: 600px;
+  animation: slideUp 0.5s ease;
+}
+
+.form-header {
+  margin-bottom: 30px;
+}
+
+.back-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-light);
+  font-family: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 20px;
+  font-size: 0.95rem;
+  transition: color 0.2s;
+}
+
+.back-btn:hover {
+  color: var(--primary-blue);
+}
+
+.form-header h2 {
+  color: var(--text-dark);
+  margin: 0 0 8px 0;
+  font-size: 1.8rem;
+}
+
+.form-header p {
+  color: var(--text-light);
+  margin: 0;
+}
+
+.voyage-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-row {
+  display: flex;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.form-group.half {
+  flex: 1;
+}
+
+label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+input, textarea {
+  padding: 12px 16px;
+  border: 1px solid #E0E5EC;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 1rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  background-color: #FCFDFE;
+}
+
+input:focus, textarea:focus {
+  outline: none;
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+  background-color: var(--white);
+}
+
+.form-submit {
+  margin-top: 10px;
+  padding: 14px;
+  font-size: 1.1rem;
+}
+
+.error-message {
+  background-color: rgba(231, 76, 60, 0.1);
+  color: #e74c3c;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+@media (max-width: 600px) {
+  .form-row {
+    flex-direction: column;
+    gap: 20px;
+  }
+}
