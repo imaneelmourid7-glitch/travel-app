@@ -23,9 +23,12 @@ function Register() {
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('user', JSON.stringify(response.data.user));
       navigate('/dashboard');
-    } catch (err) {
-      setError(err.response?.data?.message || 'Erreur lors de l\'inscription');
-    }
+   } catch (err) {
+  console.log("ERROR FULL:", err);
+  console.log("STATUS:", err.response?.status);
+  console.log("DATA:", err.response?.data);
+  setError(err.response?.data?.message || "Erreur lors de l'inscription");
+}
   };
 
   return (

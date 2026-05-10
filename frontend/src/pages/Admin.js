@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+
 import api from '../services/api';
 import './Admin.css';
-
 function Admin() {
   const navigate = useNavigate();
   const [users, setUsers] = useState([]);
   const [stats, setStats] = useState({ users: 0, voyages: 0, depenses: 0 });
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('dashboard');
+  const [voyagesOrganises, setVoyagesOrganises] = useState([]);
 
   useEffect(() => {
     fetchAdminData();
@@ -16,12 +17,16 @@ function Admin() {
 
   const fetchAdminData = async () => {
     try {
-      const [usersRes, statsRes] = await Promise.all([
+      const [usersRes, statsRes, voyagesRes] = await Promise.all([
         api.get('/admin/users'),
         api.get('/admin/stats'),
+        api.get('/voyages-organises'),
       ]);
+
       setUsers(usersRes.data);
       setStats(statsRes.data);
+      setVoyagesOrganises(voyagesRes.data);
+
     } catch (err) {
       if (err.response?.status === 403) {
         alert('Accès refusé - Réservé aux administrateurs');
@@ -29,6 +34,17 @@ function Admin() {
       }
     } finally {
       setLoading(false);
+    }
+  };
+
+  const deleteVoyage = async (id) => {
+    if (!window.confirm('Supprimer ce voyage ?')) return;
+
+    try {
+      await api.delete(`/voyages-organises/${id}`);
+      fetchAdminData();
+    } catch (err) {
+      console.error(err);
     }
   };
 
@@ -52,16 +68,29 @@ function Admin() {
           <button className={activeTab === 'users' ? 'nav-item active' : 'nav-item'} onClick={() => setActiveTab('users')}>
             👥 Utilisateurs
           </button>
+          <button
+  className={activeTab === 'voyages' ? 'nav-item active' : 'nav-item'}
+  onClick={() => setActiveTab('voyages')}
+>
+  ✈️ Voyages organisés
+</button>
         </nav>
         <button className="nav-item back-nav" onClick={() => navigate('/dashboard')}>
           ← Retour App
         </button>
+        
       </aside>
 
       {/* Main Content */}
       <main className="admin-main">
         <header className="admin-header">
-          <h1>{activeTab === 'dashboard' ? '📊 Vue d\'ensemble' : '👥 Gestion des Utilisateurs'}</h1>
+         <h1>
+  {activeTab === 'dashboard'
+    ? '📊 Vue d\'ensemble'
+    : activeTab === 'users'
+    ? '👥 Gestion des Utilisateurs'
+    : '✈️ Gestion des Voyages'}
+</h1>
         </header>
 
         {/* Stats Tab */}
@@ -121,24 +150,82 @@ function Admin() {
                 </tr>
               </thead>
               <tbody>
-                {users.map(u => (
-                  <tr key={u.id}>
-                    <td>{u.id}</td>
-                    <td><strong>{u.name}</strong></td>
-                    <td>{u.email}</td>
-                    <td>{new Date(u.created_at).toLocaleDateString('fr-FR')}</td>
-                    <td><span className="badge">{u.voyages_count}</span></td>
-                    <td>
-                      <button className="btn-danger" onClick={() => deleteUser(u.id)}>
-                        🗑️ Supprimer
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
+  {voyagesOrganises.map(v => (
+    <tr key={v.id}>
+      <td>{v.id}</td>
+      <td>{v.destination}</td>
+      <td>{v.title}</td>
+      <td>{v.prix}</td>
+      <td>
+        <button>✏️ Modifier</button>
+        <button className="btn-danger" onClick={() => deleteVoyage(v.id)}>
+          🗑️ Supprimer
+        </button>
+      </td>
+    </tr>
+  ))}
+</tbody>
             </table>
           </div>
         )}
+        {activeTab === 'voyages' && (
+  <div className="admin-content">
+    <button className="btn-primary" onClick={() => navigate('/admin/voyages/nouveau')}>
+  + Ajouter Voyage
+</button>
+
+    <table className="admin-table">
+      <thead>
+        <tr>
+          <th>Destination</th>
+      <th>Dates</th>
+      <th>Durée</th>
+      <th>Prix</th>
+      <th>Capacity</th>
+      <th>Status</th>
+      <th>Actions</th>
+
+        </tr>
+      </thead>
+      <tbody>
+        {voyagesOrganises.map(v => (
+          <tr key={v.id}>
+             <td>{v.destination}</td>
+        <td>{v.date}</td>
+        <td>{v.duree}</td>
+        <td>{v.prix}</td>
+        <td>{v.personnes}</td>
+        <td>
+  <span
+    className={
+      new Date(v.date) > new Date()
+        ? "status upcoming"
+        : "status past"
+    }
+  >
+    {new Date(v.date) > new Date() ? "Upcoming" : "Past"}
+  </span>
+</td>
+            <td className="action-buttons">
+          <button
+  className="edit-btn"
+  onClick={() => navigate(`/admin/voyages/modifier/${v.id}`)}
+>
+  ✏️
+</button>
+          <button
+            className="delete-btn"
+            onClick={() => deleteVoyage(v.id)}
+          >
+            🗑️
+          </button>
+        </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+)}
       </main>
     </div>
   );

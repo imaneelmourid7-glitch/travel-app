@@ -25,7 +25,15 @@ function VoyageForm() {
     setLoading(true);
     setError(null);
     try {
-      await api.post('/voyages', formData);
+     await api.post('/voyages-organises', {
+  destination: formData.destination,
+  title: formData.destination, // مؤقتاً نفس الاسم
+  duree: formData.date_depart + ' - ' + formData.date_retour,
+  date: formData.date_depart,
+  personnes: formData.nb_voyageurs + ' personnes',
+  prix: formData.budget_total + '€',
+  image: null
+});
       navigate('/dashboard'); // Retour au dashboard
     } catch (err) {
       setError(err.response?.data?.message || 'Erreur lors de la création du voyage');

@@ -138,3 +138,19 @@
   display: flex; justify-content: center; align-items: center;
   height: 100vh; color: #7F8C8D; font-size: 1.2rem;
 }
+.status {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.upcoming {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.past {
+  background: #fef3c7;
+  color: #92400e;
+}

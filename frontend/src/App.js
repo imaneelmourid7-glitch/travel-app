@@ -3,10 +3,11 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Register from './pages/Register';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
-
+import VoyagesOrganises from './pages/VoyagesOrganises';
 import VoyageForm from './pages/VoyageForm';
 import TripDetails from './pages/TripDetails';
 import Admin from './pages/Admin';
+import AdminVoyageForm from './pages/AdminVoyageForm';
 
 function App() {
   const isAuthenticated = !!localStorage.getItem('token');
@@ -33,6 +34,18 @@ function App() {
           element={isAuthenticated ? <Admin /> : <Navigate to="/login" />} 
         />
         <Route path="/" element={<Navigate to="/login" />} />
+        <Route 
+  path="/voyages-organises" 
+  element={isAuthenticated ? <VoyagesOrganises /> : <Navigate to="/login" />} 
+/>
+<Route
+  path="/admin/voyages/nouveau"
+  element={isAuthenticated ? <AdminVoyageForm /> : <Navigate to="/login" />}
+/>
+<Route
+  path="/admin/voyages/modifier/:id"
+  element={isAuthenticated ? <AdminVoyageForm /> : <Navigate to="/login" />}
+/>
       </Routes>
     </Router>
   );

@@ -97,9 +97,15 @@ function Dashboard() {
           <section className="voyages-section">
             <div className="section-header">
               <h2 className="section-title">Mes Voyages</h2>
-              <button className="btn-primary" onClick={() => navigate('/voyages/nouveau')}>
-                + Nouveau Voyage
-              </button>
+              <div style={{ display: 'flex', gap: '12px' }}>
+  <button className="btn-secondary" onClick={() => navigate('/voyages-organises')}>
+    Voir les voyages organisés
+  </button>
+
+  <button className="btn-primary" onClick={() => navigate('/voyages/nouveau')}>
+    + Nouveau Voyage
+  </button>
+</div>
             </div>
             
             <div className="voyages-list">
